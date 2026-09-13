@@ -1,0 +1,388 @@
+<!doctype html>
+<title>Auditoría Panezo Store</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root{
+    --paper:#f7f1e6;
+    --paper-raised:#fffcf5;
+    --ink:#241d16;
+    --ink-soft:#6b5f50;
+    --gold:#9c7228;
+    --gold-soft:#d9b877;
+    --wine:#7c2f3d;
+    --line:#e5d7ba;
+    --shadow: 0 1px 0 rgba(36,29,22,.05);
+    --urgente:#a83a30;
+    --urgente-bg:#f5e0dc;
+    --hito:#b56a1e;
+    --hito-bg:#f6e5d0;
+    --mes:#3f7566;
+    --mes-bg:#dfeae5;
+    --largo:#5c6570;
+    --largo-bg:#e6e9ec;
+    --fb-swatch:#8c5a63;
+    --tk-swatch:#2f2a26;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#181410;
+      --paper-raised:#211b15;
+      --ink:#f4ead9;
+      --ink-soft:#c2b39c;
+      --gold:#d8ab5e;
+      --gold-soft:#8a662f;
+      --wine:#d98a95;
+      --line:#3b3122;
+      --shadow: 0 1px 0 rgba(0,0,0,.3);
+      --urgente:#e2695f;
+      --urgente-bg:#3a221e;
+      --hito:#e3a35a;
+      --hito-bg:#3a2c18;
+      --mes:#7fbcac;
+      --mes-bg:#1c2e29;
+      --largo:#a7b2ba;
+      --largo-bg:#242a2f;
+      --fb-swatch:#c98e97;
+      --tk-swatch:#c9bfb5;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#181410;
+    --paper-raised:#211b15;
+    --ink:#f4ead9;
+    --ink-soft:#c2b39c;
+    --gold:#d8ab5e;
+    --gold-soft:#8a662f;
+    --wine:#d98a95;
+    --line:#3b3122;
+    --shadow: 0 1px 0 rgba(0,0,0,.3);
+    --urgente:#e2695f;
+    --urgente-bg:#3a221e;
+    --hito:#e3a35a;
+    --hito-bg:#3a2c18;
+    --mes:#7fbcac;
+    --mes-bg:#1c2e29;
+    --largo:#a7b2ba;
+    --largo-bg:#242a2f;
+    --fb-swatch:#c98e97;
+    --tk-swatch:#c9bfb5;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Manrope', system-ui, -apple-system, sans-serif;
+    padding:0 20px 64px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+
+  h1,h2,h3{font-family:'Fraunces', Georgia, serif; text-wrap:balance; margin:0;}
+  .mono{font-family:'Space Mono', 'Courier New', monospace;}
+
+  /* ---------- Header ---------- */
+  header{
+    padding:56px 0 40px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--gold); font-weight:700; margin-bottom:14px;
+  }
+  h1{font-size:clamp(2rem,5vw,3rem); font-weight:600; color:var(--ink); line-height:1.08;}
+  .subtitle{
+    margin-top:14px; font-size:1.05rem; color:var(--ink-soft); max-width:60ch; line-height:1.55;
+  }
+  .meta-row{
+    margin-top:22px; display:flex; gap:22px; flex-wrap:wrap;
+    font-size:.82rem; color:var(--ink-soft);
+  }
+  .meta-row strong{color:var(--ink); font-weight:700;}
+
+  /* ---------- Channel strip ---------- */
+  .strip{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+    margin-top:32px;
+  }
+  .chip{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:14px;
+    padding:18px 16px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:10px; min-width:0;
+  }
+  .chip-top{display:flex; align-items:center; gap:12px;}
+  .avatar{
+    width:46px; height:46px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces',serif; font-weight:600; font-size:1.1rem; color:#fffdf7;
+  }
+  .avatar.gold{background:radial-gradient(circle at 32% 30%, var(--gold-soft), var(--gold) 70%);}
+  .avatar.fb{background:radial-gradient(circle at 32% 30%, #b98d94, var(--fb-swatch) 75%);}
+  .chip-name{font-weight:800; font-size:.95rem; line-height:1.2;}
+  .chip-handle{font-size:.78rem; color:var(--ink-soft);}
+  .chip-net{
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--ink-soft);
+  }
+  .chip-stats{
+    display:flex; justify-content:space-between; font-size:.78rem; color:var(--ink-soft);
+    border-top:1px dashed var(--line); padding-top:10px; font-variant-numeric:tabular-nums;
+  }
+  .chip-stats b{color:var(--ink); font-weight:800;}
+  .chip-flag{
+    font-size:.72rem; color:var(--urgente); font-weight:700;
+  }
+
+  /* ---------- Sections ---------- */
+  section{padding:44px 0; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{margin-bottom:26px;}
+  .section-num{
+    font-family:'Space Mono',monospace; font-size:.72rem; color:var(--gold); letter-spacing:.08em;
+  }
+  h2{font-size:1.6rem; font-weight:600; margin-top:6px;}
+  .lede{color:var(--ink-soft); max-width:62ch; margin-top:8px; line-height:1.6; font-size:.96rem;}
+
+  /* ---------- Scorecards ---------- */
+  .score-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px;
+  }
+  .score-card{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:14px; padding:18px 20px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .score-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .score-title{font-weight:800; font-size:.92rem;}
+  .pill{
+    font-size:.66rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+    padding:4px 10px; border-radius:99px; white-space:nowrap;
+  }
+  .pill.critico{background:var(--urgente-bg); color:var(--urgente);}
+  .pill.atencion{background:var(--hito-bg); color:var(--hito);}
+  .pill.bien{background:var(--mes-bg); color:var(--mes);}
+  .score-body{font-size:.86rem; color:var(--ink-soft); line-height:1.55;}
+
+  /* ---------- Comparison table ---------- */
+  .table-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:14px;}
+  table{border-collapse:collapse; width:100%; min-width:640px; font-size:.86rem; background:var(--paper-raised);}
+  th,td{text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); vertical-align:top;}
+  thead th{
+    font-family:'Space Mono',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-soft); background:var(--paper); font-weight:700;
+  }
+  tbody th{font-weight:700; color:var(--ink); width:170px; font-size:.82rem;}
+  tbody tr:last-child td, tbody tr:last-child th{border-bottom:none;}
+  .warn{color:var(--urgente); font-weight:700;}
+  .ok{color:var(--mes); font-weight:700;}
+
+  /* ---------- Contradiction cards ---------- */
+  .contra-list{display:flex; flex-direction:column; gap:12px;}
+  .contra{
+    background:var(--paper-raised); border-left:3px solid var(--urgente); border-radius:0 12px 12px 0;
+    padding:14px 18px; font-size:.9rem; line-height:1.55;
+  }
+  .contra b{color:var(--ink);}
+  .contra .vs{color:var(--ink-soft); font-style:italic;}
+
+  /* ---------- Priority board ---------- */
+  .board{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  @media (max-width:860px){ .board{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .board{grid-template-columns:1fr;} .strip{grid-template-columns:1fr;} }
+  .col{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:14px;
+    padding:16px; display:flex; flex-direction:column; gap:12px;
+  }
+  .col-head{
+    font-size:.72rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+    padding-bottom:10px; border-bottom:2px solid var(--c);
+    color:var(--c);
+  }
+  .col.urgente{--c:var(--urgente);}
+  .col.hito{--c:var(--hito);}
+  .col.mes{--c:var(--mes);}
+  .col.largo{--c:var(--largo);}
+  .item{
+    display:flex; gap:9px; font-size:.84rem; line-height:1.5; color:var(--ink);
+  }
+  .item::before{
+    content:''; width:7px; height:7px; border-radius:2px; background:var(--c); margin-top:6px; flex:none;
+  }
+
+  /* ---------- Aside ---------- */
+  .aside{
+    margin-top:22px; padding:14px 18px; border:1px dashed var(--line); border-radius:12px;
+    font-size:.82rem; color:var(--ink-soft); background:var(--paper);
+  }
+  .aside b{color:var(--ink);}
+
+  footer{
+    padding:40px 0 10px; color:var(--ink-soft); font-size:.8rem; display:flex; justify-content:space-between;
+    flex-wrap:wrap; gap:10px;
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Auditoría de coherencia de marca</div>
+    <h1>Panezo Store — un negocio, tres versiones</h1>
+    <p class="subtitle">Extensiones de cabello y mayoreo · Quevedo, Ecuador. Facebook, Instagram y TikTok muestran a la marca bajo nombres, fotos y datos de contacto distintos — lo que puede estar costando ventas por confusión antes de que el cliente llegue al WhatsApp.</p>
+    <div class="meta-row">
+      <span><strong>Canales revisados:</strong> Facebook, Instagram (@panezo_store), TikTok (@panezo_store)</span>
+      <span><strong>Fuente:</strong> capturas de pantalla de perfil, bio, highlights y feed</span>
+      <span><strong>Fecha:</strong> 13 sept. 2026</span>
+    </div>
+
+    <div class="strip">
+      <div class="chip">
+        <div class="chip-top">
+          <div class="avatar fb">P</div>
+          <div>
+            <div class="chip-name">Panezo Store</div>
+            <div class="chip-handle">Página de Facebook</div>
+          </div>
+        </div>
+        <div class="chip-net">Facebook</div>
+        <div class="chip-stats"><span>Seguidores</span><b>662</b></div>
+        <div class="chip-flag">⚠ Foto de perfil: retrato personal, no el logo</div>
+      </div>
+      <div class="chip">
+        <div class="chip-top">
+          <div class="avatar gold">P</div>
+          <div>
+            <div class="chip-name">Extensiones Panezo 💕</div>
+            <div class="chip-handle mono">@panezo_store</div>
+          </div>
+        </div>
+        <div class="chip-net">Instagram</div>
+        <div class="chip-stats"><span>Seguidores</span><b>200</b></div>
+        <div class="chip-flag">⚠ Nombre visible distinto al de Facebook</div>
+      </div>
+      <div class="chip">
+        <div class="chip-top">
+          <div class="avatar gold">P</div>
+          <div>
+            <div class="chip-name">Extensiones Panezo</div>
+            <div class="chip-handle mono">@panezo_store</div>
+          </div>
+        </div>
+        <div class="chip-net">TikTok</div>
+        <div class="chip-stats"><span>Seguidores</span><b>840</b></div>
+        <div class="chip-flag">⚠ Bio con dos números de contacto distintos</div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <div class="section-num">01 — Resumen ejecutivo</div>
+      <h2>Seis dimensiones, dos en rojo</h2>
+      <p class="lede">Calificación de coherencia entre canales para cada dimensión evaluada.</p>
+    </div>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-top"><span class="score-title">Nombre y usuario</span><span class="pill atencion">Atención</span></div>
+        <p class="score-body">El @panezo_store es el mismo en Instagram y TikTok, pero el nombre visible cambia: "Panezo Store" en Facebook frente a "Extensiones Panezo" en las otras dos redes.</p>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><span class="score-title">Identidad visual</span><span class="pill critico">Crítico</span></div>
+        <p class="score-body">Instagram y TikTok usan el logo dorado. Facebook muestra una foto personal como imagen de perfil, y las carátulas de highlights no comparten un mismo estilo.</p>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><span class="score-title">Canal de contacto</span><span class="pill critico">Crítico</span></div>
+        <p class="score-body">TikTok publica dos números distintos como contacto. Facebook e Instagram coinciden en uno solo, pero no es el mismo que TikTok marca como "WhatsApp".</p>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><span class="score-title">Contenido del feed</span><span class="pill atencion">Atención</span></div>
+        <p class="score-body">Facebook y TikTok mantienen el feed enfocado en producto. Instagram mezcla ese contenido con publicaciones personales/casuales que restan seriedad.</p>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><span class="score-title">Ortografía y naming</span><span class="pill atencion">Atención</span></div>
+        <p class="score-body">Errores en highlights: "Stilos" en Instagram y "Extenciones" en Facebook. Ambos son puntos de contacto muy visibles en el perfil.</p>
+      </div>
+      <div class="score-card">
+        <div class="score-top"><span class="score-title">Posicionamiento</span><span class="pill atencion">Atención</span></div>
+        <p class="score-body">TikTok se presenta como "Mayorista Ecuador" de forma explícita. Facebook e Instagram usan un mensaje más ambiguo que no menciona el mayoreo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-num">02 — Comparativa</div>
+      <h2>Lo mismo, contado tres veces distinto</h2>
+      <p class="lede">Cada atributo de marca, tal como aparece hoy en cada canal.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th></th><th>Facebook</th><th>Instagram</th><th>TikTok</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Nombre visible</th><td>Panezo Store</td><td class="warn">Extensiones Panezo 💕</td><td class="warn">Extensiones Panezo</td></tr>
+          <tr><th>Usuario</th><td>—  (página, sin @)</td><td class="mono ok">@panezo_store</td><td class="mono ok">@panezo_store</td></tr>
+          <tr><th>Foto de perfil</th><td class="warn">Retrato personal</td><td class="ok">Logo dorado "Panezo"</td><td class="ok">Logo dorado "Panezo Store"</td></tr>
+          <tr><th>Highlights / covers</th><td class="warn">Fotos de producto sin marca</td><td class="ok">Íconos dorados ilustrados</td><td>No aplica en el mismo formato</td></tr>
+          <tr><th>WhatsApp mostrado</th><td class="mono ok">096 310 0360</td><td class="mono ok">096 310 0360 (link wa.me)</td><td class="mono warn">093 907 5011</td></tr>
+          <tr><th>Teléfono alterno</th><td>—</td><td>—</td><td class="mono warn">096 310 0360 ("solo llamada")</td></tr>
+          <tr><th>Mensaje clave</th><td>"Haz negocio mientras luces espectacular"</td><td>"Haz negocio mientras luces espectacular"</td><td class="warn">"Calidad en tus extensiones · Mayorista Ecuador"</td></tr>
+          <tr><th>Errores detectados</th><td class="warn">"Extenciones"</td><td class="warn">"Stilos"</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="aside"><b>Al margen:</b> en las sugerencias de Instagram aparecen cuentas del mismo rubro belleza (skincare/maquillaje) como "vecinas" de audiencia. Panezo no compite directamente con ellas en producto, pero comparte pantalla — una razón más para que el mensaje de "mayorista de extensiones" quede inconfundible en todos los canales.</div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-num">03 — Contradicciones</div>
+      <h2>Lo que un canal dice y otro contradice</h2>
+    </div>
+    <div class="contra-list">
+      <div class="contra"><b>WhatsApp.</b> Instagram y Facebook llevan al cliente al <span class="mono">096 310 0360</span>. TikTok llama "WhatsApp" al <span class="mono">093 907 5011</span> y deja el <span class="mono">096 310 0360</span> como "solo llamada" — <span class="vs">un cliente que llega por TikTok puede escribir al número equivocado y no recibir respuesta.</span></div>
+      <div class="contra"><b>Nombre de marca.</b> Facebook se presenta como <b>"Panezo Store"</b>; Instagram y TikTok como <b>"Extensiones Panezo"</b> — <span class="vs">quien busca un nombre de boca en boca puede no encontrar el otro canal.</span></div>
+      <div class="contra"><b>Rostro de la marca.</b> El logo dorado identifica a Panezo en Instagram y TikTok; en Facebook, la primera imagen que ve el cliente es una foto personal — <span class="vs">rompe el reconocimiento visual justo en el canal con más seguidores (662).</span></div>
+      <div class="contra"><b>Propuesta de valor.</b> TikTok dice explícitamente "Mayorista Ecuador"; Facebook e Instagram solo insinúan negocio con "haz negocio mientras luces espectacular" — <span class="vs">un revendedor puede no entender, leyendo solo el Instagram, que Panezo vende al por mayor.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="section-num">04 — Plan de acción</div>
+      <h2>Qué corregir, y en qué orden</h2>
+      <p class="lede">Agrupado por urgencia real de negocio, no por canal.</p>
+    </div>
+    <div class="board">
+      <div class="col urgente">
+        <div class="col-head">Urgente · hoy</div>
+        <div class="item">Definir cuál número es el WhatsApp real y usarlo — con el mismo link wa.me — en Facebook, Instagram y TikTok.</div>
+        <div class="item">Cambiar la foto de perfil de Facebook por el logo dorado oficial que ya usan Instagram y TikTok.</div>
+        <div class="item">Corregir "Stilos" → "Estilos" (Instagram) y "Extenciones" → "Extensiones" (Facebook).</div>
+      </div>
+      <div class="col hito">
+        <div class="col-head">Antes del próximo hito</div>
+        <div class="item">Elegir un solo nombre visible — "Panezo Store" o "Extensiones Panezo" — y aplicarlo igual en las tres redes.</div>
+        <div class="item">Rediseñar las carátulas de highlights de Facebook con el mismo estilo de ícono dorado de Instagram.</div>
+        <div class="item">Sumar la palabra "Mayorista" al mensaje de Facebook e Instagram, tal como ya aparece en TikTok.</div>
+      </div>
+      <div class="col mes">
+        <div class="col-head">Este mes</div>
+        <div class="item">Curar el feed de Instagram: mover selfies y contenido personal a Historias, dejar el feed 100% producto/marca.</div>
+        <div class="item">Verificar el término "cabello orgánico" en la bio frente al lenguaje estándar del rubro (cabello humano / remy).</div>
+        <div class="item">Unificar el formato de escritura del teléfono (espacios/guiones) en las tres bios.</div>
+      </div>
+      <div class="col largo">
+        <div class="col-head">Mediano plazo</div>
+        <div class="item">Redactar una guía de marca corta: logo, paleta dorada, tono de voz, para todo highlight o carátula nueva.</div>
+        <div class="item">Armar un calendario de contenido único adaptado a cada red sin perder la misma identidad.</div>
+        <div class="item">Vigilar cuentas de belleza cercanas en Quevedo para sostener el diferencial "mayorista + cabello humano".</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Auditoría de marca — Panezo Store</span>
+    <span>Basada en capturas de pantalla provistas · no incluye métricas de rendimiento pagado</span>
+  </footer>
+
+</div>
